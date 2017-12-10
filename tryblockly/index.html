@@ -1,48 +1,109 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<style>
+  /* Move down content because we have a fixed navbar that is 3.5rem tall */
+  body {padding-top:3.5rem;}
+  h1 {padding-bottom:9px;margin-bottom:20px;border-bottom:1px solid #EEE;}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  /* Sidebar */
+  .sidebar {position:fixed;top:51px;bottom:0;left:0;z-index:1000;padding:20px 0;overflow-x:hidden;overflow-y:auto;border-right:1px solid #EEE;}
+
+   /* Scrollable contents if viewport is shorter than content. */
+  .sidebar .nav {margin-bottom:20px;}
+  .sidebar .nav-item {width:100%;}
+  .sidebar .nav-item + .nav-item {margin-left:0;}
+  .sidebar .nav-link {border-radius:0;}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 <script src ="../blockly_compressed.js"></script>
 <script src ="../blocks_compressed.js"></script>
 <script src="../msg/js/en.js"></script>
 <script>
 $(function () {
-
   $(document).ready(function () {
-    var workspacePlayground = Blockly.inject('blocklyDiv',
-        {toolbox: document.getElementById('toolbox')});
+    var workspacePlayground = Blockly.inject('FixedBlock',
+        {toolbox: document.getElementById('FixedBlock_toolbox')});
   });
 
 });
 </script>
 </head>
 <body>
-  <div id="blocklyDiv" style="height: 480px; width: 600px;">
-    <xml id="toolbox" style="display: none">
-      <category name="Core">
-        <category name="Control">
-          <block type="controls_if"></block>
-          <block type="controls_whileUntil"></block>
-        </category>
-        <category name="Logic">
-          <block type="logic_compare"></block>
-          <block type="logic_operation"></block>
-          <block type="logic_boolean"></block>
-        </category>
-      </category>
-      <category name="Custom">
-        <block type="start"></block>
-        <category name="Move">
-          <block type="move_forward"></block>
-          <block type="move_backward"></block>
-        </category>
-        <category name="Turn">
-          <block type="turn_left"></block>
-          <block type="turn_right"></block>
-        </category>
-      </category>
-    </xml>
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">TRY-Blockly</a>
+      <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Settings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Help</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container-fluid">
+    <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Fixed Blockly</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Leavel</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Blockly Developer Tools</a>
+        </li>
+      </ul>
+
+      <!-- <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Nav item again</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">One more nav</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Another nav item</a>
+        </li>
+      </ul> -->
+    </nav>
+
+    <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+      <h1>Fixed Blockly</h1>
+      <section>
+        <div id="FixedBlock" style="height:480px;width:600px;">
+          <xml id="FixedBlock_toolbox" style="display:none">
+            <block type="controls_if"></block>
+            <block type="logic_compare"></block>
+            <block type="controls_repeat_ext"></block>
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
+            <block type="text"></block>
+            <block type="text_print"></block>
+          </xml>
+        </div>
+      </section>
+    </main>
   </div>
+
 </body>
 </html>
