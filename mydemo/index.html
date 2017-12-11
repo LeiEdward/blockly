@@ -16,7 +16,8 @@
   .sidebar .nav-item + .nav-item {margin-left:0;}
   .sidebar .nav-link {border-radius:0;}
 </style>
-
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
@@ -24,10 +25,31 @@
 <script src ="../blocks_compressed.js"></script>
 <script src="../msg/js/en.js"></script>
 <script>
+const FixedBlockly = {template: '<div>test<div id="FixedBlock"style="height:480px;width:600px;"><xml id="FixedBlock_toolbox"style="display:none"><block type="controls_if"></block><block type="logic_compare"></block><block type="controls_repeat_ext"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="text_print"></block></xml></div></div>'}
+// const FixedBlockly = {template: '<div>FixedBlockly</div>'}
+
+const routes = [
+  {path: '/FixedBlockly', component: FixedBlockly }
+]
+
+// 3. 创建 router 实例，然后传 `routes` 配置
+// 你还可以传别的配置参数, 不过先这么简单着吧。
+const router = new VueRouter({
+  routes, // （缩写）相当于 routes: routes
+  linkActiveClass: 'active'
+})
+
+var workspacePlayground;
 $(function () {
   $(document).ready(function () {
-    var workspacePlayground = Blockly.inject('FixedBlock',
-        {toolbox: document.getElementById('FixedBlock_toolbox')});
+    const app = new Vue({
+      router,
+      mounted: function () {
+        // blockly
+        workspacePlayground = Blockly.inject('FixedBlock',
+            {toolbox: document.getElementById('FixedBlock_toolbox')});
+      }
+    }).$mount('#app')
   });
 
 });
@@ -36,35 +58,23 @@ $(function () {
 <body>
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#">TRY-Blockly</a>
-      <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
+      <a class="navbar-brand" href="./index.html">Blockly</a>
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Settings</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Help</a>
+            <a class="nav-link" href="https://developers.google.com/blockly/">API</a>
           </li>
         </ul>
       </div>
     </nav>
   </header>
 
-  <div class="container-fluid">
+  <div id="app" class="container-fluid">
     <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
       <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Fixed Blockly</a>
+          <router-link to="/FixedBlockly" class="nav-link">Fixed Blockly</router-link>
+          <!-- <a class="nav-link active" href="#">Fixed Blockly</a> -->
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Leavel</a>
@@ -73,34 +83,12 @@ $(function () {
           <a class="nav-link" href="#">Blockly Developer Tools</a>
         </li>
       </ul>
-
-      <!-- <ul class="nav nav-pills flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Nav item again</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">One more nav</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Another nav item</a>
-        </li>
-      </ul> -->
     </nav>
 
     <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
       <h1>Fixed Blockly</h1>
       <section>
-        <div id="FixedBlock" style="height:480px;width:600px;">
-          <xml id="FixedBlock_toolbox" style="display:none">
-            <block type="controls_if"></block>
-            <block type="logic_compare"></block>
-            <block type="controls_repeat_ext"></block>
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="text"></block>
-            <block type="text_print"></block>
-          </xml>
-        </div>
+        <router-view></router-view>
       </section>
     </main>
   </div>
