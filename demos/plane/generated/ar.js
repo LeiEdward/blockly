@@ -28,6 +28,7 @@ planepage.start = function(opt_data, opt_ignored, opt_ijData) {
       break;
   }
   output += '</p><p>لبناء صيغة (أدناه) تقوم بحساب إجمالي عدد المقاعد في الطائرة عند تغيير الصفوف (أعلاه).</p><script src="../../blockly_compressed.js"><\/script><script src="../../blocks_compressed.js"><\/script><script src="../../javascript_compressed.js"><\/script><script src="../../msg/js/' + soy.$$escapeHtml(opt_ijData.lang) + '.js"><\/script><script src="blocks.js"><\/script>' + planepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div>';
+  console.log(output);
   return output;
 };
 

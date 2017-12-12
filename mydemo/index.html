@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<link rel="stylesheet" href="../demos/plane/style.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 <style>
   /* Move down content because we have a fixed navbar that is 3.5rem tall */
@@ -24,32 +25,54 @@
 <script src ="../blockly_compressed.js"></script>
 <script src ="../blocks_compressed.js"></script>
 <script src="../msg/js/en.js"></script>
+<script src="../demos/plane/soy/soyutils.js"></script>
+<script src="../demos/plane/plane.js"></script>
 <script>
-const FixedBlockly = {template: '<div>test<div id="FixedBlock"style="height:480px;width:600px;"><xml id="FixedBlock_toolbox"style="display:none"><block type="controls_if"></block><block type="logic_compare"></block><block type="controls_repeat_ext"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="text_print"></block></xml></div></div>'}
-// const FixedBlockly = {template: '<div>FixedBlockly</div>'}
+const tmep_FixedBlockly = {template: '#Comp_FixedBlock'};
+const tmep_PlaneBlock = {template: '#Comp_PlaneBlock'};
 
 const routes = [
-  {path: '/FixedBlockly', component: FixedBlockly }
-]
+  {path: '/FixedBlockly', component: tmep_FixedBlockly},
+  {path: '/PlaneBlock', component: tmep_PlaneBlock}
+];
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 // 你还可以传别的配置参数, 不过先这么简单着吧。
 const router = new VueRouter({
   routes, // （缩写）相当于 routes: routes
   linkActiveClass: 'active'
-})
+});
+router.replace({path: '/FixedBlockly?id=FixedBlock', redirect: '/'});
 
 var workspacePlayground;
-$(function () {
-  $(document).ready(function () {
-    const app = new Vue({
+var sBlockId = '';
+$(function() {
+
+  $(document).ready(function() {
+    var app = new Vue({
       router,
-      mounted: function () {
-        // blockly
-        workspacePlayground = Blockly.inject('FixedBlock',
-            {toolbox: document.getElementById('FixedBlock_toolbox')});
+      mounted: function() {
+        this.matchNav();
+      },
+      methods: {
+        matchNav: function() {
+          if (sBlockId == this.$route.query.id) return;
+
+          sBlockId = this.$route.query.id;
+          console.log(sBlockId);
+          switch (sBlockId) {
+            case 'PlaneBlock':
+              break;
+
+            default:
+              workspacePlayground = Blockly.inject(sBlockId,
+                {toolbox: document.getElementById('xml_' + sBlockId)});
+              break;
+          }
+
+        }
       }
-    }).$mount('#app')
+    }).$mount('#app');
   });
 
 });
@@ -64,6 +87,9 @@ $(function () {
           <li class="nav-item">
             <a class="nav-link" href="https://developers.google.com/blockly/">API</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://blockly-demo.appspot.com/static/demos/index.html">Demo</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -72,12 +98,11 @@ $(function () {
   <div id="app" class="container-fluid">
     <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
       <ul class="nav nav-pills flex-column">
-        <li class="nav-item">
-          <router-link to="/FixedBlockly" class="nav-link">Fixed Blockly</router-link>
-          <!-- <a class="nav-link active" href="#">Fixed Blockly</a> -->
+        <li @click="matchNav()" class="nav-item">
+          <router-link :to="{path:'/FixedBlockly', query:{id:'FixedBlock'}}" class="nav-link">Fixed Blockly</router-link>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Leavel</a>
+        <li @click="matchNav()" class="nav-item">
+          <router-link :to="{path:'/PlaneBlock', query:{id:'PlaneBlock'}}" class="nav-link">Plane Blockly</router-link>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Blockly Developer Tools</a>
@@ -95,3 +120,23 @@ $(function () {
 
 </body>
 </html>
+
+<script id="Comp_FixedBlock" type="text/x-template">
+  <div id="FixedBlock" style="height:480px;width:600px;">
+    <xml id="xml_FixedBlock" style="display:none">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="controls_repeat_ext"></block>
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="text"></block>
+      <block type="text_print"></block>
+    </xml>
+  </div>
+</script>
+
+<script id="Comp_PlaneBlock" type="text/x-template">
+  <div id="PlaneBlock" style="height:480px;width:600px;">
+    <iframe src="../demos/plane/index.html" style="width:100%;heigth:100%;"></iframe>
+  </div>
+</script>
