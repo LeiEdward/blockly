@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta charset="utf-8">
 <link rel="stylesheet" href="../demos/plane/style.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 <style>
@@ -30,10 +31,14 @@
 <script>
 const tmep_FixedBlockly = {template: '#Comp_FixedBlock'};
 const tmep_PlaneBlock = {template: '#Comp_PlaneBlock'};
+const tmep_BlocklyRun = {template: '#Comp_BlocklyRun'};
+const tmep_BlocklyDev = {template: '#Comp_BlocklyDev'};
 
 const routes = [
   {path: '/FixedBlockly', component: tmep_FixedBlockly},
-  {path: '/PlaneBlock', component: tmep_PlaneBlock}
+  {path: '/PlaneBlock', component: tmep_PlaneBlock},
+  {path: '/BlocklyRun', component: tmep_BlocklyRun},
+  {path: '/BlocklyDev', component: tmep_BlocklyDev}
 ];
 
 // 3. 创建 router 实例，然后传 `routes` 配置
@@ -44,7 +49,6 @@ const router = new VueRouter({
 });
 router.replace({path: '/FixedBlockly?id=FixedBlock', redirect: '/'});
 
-var workspacePlayground;
 var sBlockId = '';
 $(function() {
 
@@ -65,8 +69,8 @@ $(function() {
               break;
 
             default:
-              workspacePlayground = Blockly.inject(sBlockId,
-                {toolbox: document.getElementById('xml_' + sBlockId)});
+              // var workspacePlayground = Blockly.inject(sBlockId,
+              //   {toolbox: document.getElementById('xml_' + sBlockId)});
               break;
           }
 
@@ -74,7 +78,6 @@ $(function() {
       }
     }).$mount('#app');
   });
-
 });
 </script>
 </head>
@@ -102,16 +105,19 @@ $(function() {
           <router-link :to="{path:'/FixedBlockly', query:{id:'FixedBlock'}}" class="nav-link">Fixed Blockly</router-link>
         </li>
         <li @click="matchNav()" class="nav-item">
+          <router-link :to="{path:'/BlocklyRun', query:{id:'BlocklyRun'}}" class="nav-link">Blockly Run</router-link>
+        </li>
+        <li @click="matchNav()" class="nav-item">
           <router-link :to="{path:'/PlaneBlock', query:{id:'PlaneBlock'}}" class="nav-link">Plane Blockly</router-link>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Blockly Developer Tools</a>
+        <li @click="matchNav()" class="nav-item">
+          <router-link :to="{path:'/BlocklyDev', query:{id:'BlocklyDev'}}" class="nav-link">Plane Blockly</router-link>
         </li>
       </ul>
     </nav>
 
     <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-      <h1>Fixed Blockly</h1>
+      <h1>Blockly Demos</h1>
       <section>
         <router-view></router-view>
       </section>
@@ -122,8 +128,9 @@ $(function() {
 </html>
 
 <script id="Comp_FixedBlock" type="text/x-template">
-  <div id="FixedBlock" style="height:480px;width:600px;">
-    <xml id="xml_FixedBlock" style="display:none">
+  <div id="FixedBlock" style="width:100%;height:650px;overflow:hidden;">
+    <iframe src="../demos/fixed/index.html" style="border:none;scroll:none;width:100%;height:100%;"></iframe>
+    <!-- <xml id="xml_FixedBlock" style="display:none">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="controls_repeat_ext"></block>
@@ -131,12 +138,24 @@ $(function() {
       <block type="math_arithmetic"></block>
       <block type="text"></block>
       <block type="text_print"></block>
-    </xml>
+    </xml> -->
   </div>
 </script>
 
 <script id="Comp_PlaneBlock" type="text/x-template">
-  <div id="PlaneBlock" style="height:480px;width:600px;">
-    <iframe src="../demos/plane/index.html" style="width:100%;heigth:100%;"></iframe>
+  <div id="PlaneBlock" style="width:100%;height:600px;overflow:hidden;">
+    <iframe src="../demos/plane/index.html" style="border:none;width:100%;height:100%;"></iframe>
+  </div>
+</script>
+
+<script id="Comp_BlocklyRun" type="text/x-template">
+  <div id="BlocklyRun" style="width:100%;height:600px;overflow:hidden;">
+    <iframe src="../demos/code/index.html" style="border:none;width:100%;height:100%;"></iframe>
+  </div>
+</script>
+
+<script id="Comp_BlocklyDev" type="text/x-template">
+  <div id="BlocklyRun" style="width:100%;height:600px;overflow:hidden;">
+    <iframe src="https://blockly-demo.appspot.com/static/demos/blockfactory/index.html" style="border:none;width:100%;height:100%;"></iframe>
   </div>
 </script>
