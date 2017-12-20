@@ -5,7 +5,6 @@
   <meta name="google" value="notranslate">
   <title>Blockly Demo:</title>
   <link rel="stylesheet" href="style.css">
-  <script src="/storage.js"></script>
   <script src="../../blockly_compressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
@@ -17,16 +16,32 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script>
   $(function() {
-    $('#saveButton').click(function () {
+    $('#exportButton').click(function () {
+      var xml = Blockly.Xml.workspaceToDom(Code.workspace);
+      var xml_text = Blockly.Xml.domToText(xml);
+      var sEncode64 = btoa(xml_text);
+      if ('' !== sEncode64) {
+        var uri = 'data:application/octet-stream;charset=utf-8;base64,' + sEncode64;
+        var oXmlDownload = document.createElement("a");
+        oXmlDownload.href = uri;
+        oXmlDownload.download = "export.xml";
 
-      // var xml = Blockly.Xml.workspaceToDom(Code.workspace);
-      // var xml_text = Blockly.Xml.domToText(xml);
-      // console.log(xml_text);
-      var s = '<xml xmlns="http://www.w3.org/1999/xhtml"><variables></variables><block type="controls_if" id="?O|c`i0{Ey(taJu!22rl" x="188" y="113"><statement name="DO0"><block type="controls_whileUntil" id="Mu)kg_^[J/X0yBm[/g^D"><field name="MODE">WHILE</field></block></statement></block><block type="text_join" id="/S;Dff[+mWI5h8wFYsT-" x="138" y="288"><mutation items="2"></mutation></block></xml>';
-      // Restoring from an XML string to blocks is just as simple:
-      var xml = Blockly.Xml.textToDom(s);
-      Blockly.Xml.domToWorkspace(xml, Code.workspace);
-    })
+        document.body.appendChild(oXmlDownload);
+        oXmlDownload.click();
+        document.body.removeChild(oXmlDownload);
+      }
+    });
+
+    $('body').on('change', '.tabmax > button > input', function (e) {
+      if (typeof this.files[0] === 'undefined') return;
+
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        var xml = Blockly.Xml.textToDom(event.target.result);
+        Blockly.Xml.domToWorkspace(xml, Code.workspace);
+      }
+      reader.readAsText(this.files[0]);
+    });
   });
   </script>
 </head>
@@ -61,17 +76,21 @@
             <td class="tabmin">&nbsp;</td>
             <td id="tab_xml" class="taboff">XML</td>
             <td class="tabmax">
-              <button id="saveButton" class="notext" title="..." style="border:1px solid #28A745;background-color:#28A745;">
-                <img src="../../media/save.png" style="height:21px;width:21px;opacity:1;">
-              </button>
-              <button id="trashButton" class="notext" title="...">
-                <img src='../../media/1x1.gif' class="trash icon21">
-              </button>
-              <button id="linkButton" class="notext" title="...">
-                <img src='../../media/1x1.gif' class="link icon21">
-              </button>
               <button id="runButton" class="notext primary" title="...">
                 <img src='../../media/1x1.gif' class="run icon21">
+              </button>
+              <button id="importButton" class="notext" title="..." style="position:relative;border:1px solid #007BFF;background-color:#007BFF;">
+                <img src="../../media/save.png" style="height:21px;width:21px;opacity:1;" />
+                <input id="uplodefile" type="file" value="" style="position:absolute;top:0;left:0;z-index:99;opacity:0;width:43px;" />
+              </button>
+              <button id="exportButton" class="notext" title="..." style="border:1px solid #28A745;background-color:#28A745;">
+                <img src="../../media/export.png" style="height:21px;width:21px;opacity:1;" />
+              </button>
+              <button id="trashButton" class="notext" title="...">
+                <img src='../../media/1x1.gif' class="trash icon21" />
+              </button>
+              <button id="linkButton" class="notext" title="...">
+                <img src='../../media/1x1.gif' class="link icon21" />
               </button>
             </td>
           </tr>

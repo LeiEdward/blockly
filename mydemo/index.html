@@ -47,7 +47,7 @@ const router = new VueRouter({
   routes, // （缩写）相当于 routes: routes
   linkActiveClass: 'active'
 });
-router.replace({path: '/FixedBlockly?id=FixedBlock', redirect: '/'});
+router.replace({path: '/BlocklyRun?id=BlocklyRun', redirect: '/'});
 
 var sBlockId = '';
 $(function() {
@@ -115,7 +115,6 @@ $(function() {
         </li>
       </ul>
     </nav>
-
     <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
       <h1>Blockly Demos</h1>
       <section>
